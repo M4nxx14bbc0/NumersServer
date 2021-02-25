@@ -12,13 +12,13 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author pogliani.mattia
+ * @author parrarodriguez.manue
  */
-public class ServerThread implements Runnable {
+public class Main implements Runnable {
 
     private Socket clientSocket;
 
-    public ServerThread(Socket clientSocket) {
+    public Main(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 
@@ -46,7 +46,7 @@ public class ServerThread implements Runnable {
             System.out.println("chiusura connessione effettuata");
 
         } catch (IOException ex) {
-            Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

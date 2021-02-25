@@ -12,9 +12,9 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author pogliani.mattia
+ * @author parrarodriguez.manue
  */
-public class ServerMultiThread {
+public class Serverino {
 
     /**
      * @param args the command line arguments
@@ -29,13 +29,13 @@ public class ServerMultiThread {
                 Socket client = server.accept();
                 System.out.println("connessione ricevuta, ora se la smazza il thread");
                 Thread Serverino
-                        = new Thread(new ServerThread(client));
+                        = new Thread(new Main(client));
                 Serverino.start();
 
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(ServerMultiThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Serverino.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
