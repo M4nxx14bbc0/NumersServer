@@ -26,8 +26,8 @@ public class Main {
             while (true) {
                 Socket client = server.accept();
                 System.out.println("Connessione ricevuta");
-                Thread Serverino = new Thread(new Serverino(client));
-                Serverino.start();
+                Thread serverino = new Thread(new Serverino(client));
+                serverino.start();
             }
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

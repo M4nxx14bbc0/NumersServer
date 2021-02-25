@@ -23,23 +23,27 @@ public class Serverino implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Clinet collegato: " + clientSocket.getInetAddress());
+        System.out.println("Client collegato: " + clientSocket.getInetAddress());
         try {
-            PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
-            BufferedReader lettore = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            InputStream dalServer = clientSocket.getInputStream();
+            OutputStream alServer = clientSocket.getOutputStream(); 
+            
+            PrintWriter scrittore = new PrintWriter(alServer, true);
+            BufferedReader lettore = new BufferedReader(new InputStreamReader(dalServer));
             String messaggio = "";
-            while (!messaggio.equals("exit")) {
+            while (!messaggio.equalsIgnoreCase("exit")) {
                 System.out.println("serverino in ascolto...");
                 messaggio = lettore.readLine();
                 System.out.println("stringa dal client: " + messaggio);
-                scrittore.println(messaggio.toUpperCase());
+                scrittore.println(messaggio + ": "+messaggio.length());
             }
 
             scrittore.close();
             clientSocket.close();
 
             System.out.println("chiusura connessione effettuata");
-
+            Thread.sleep(5000);
+        } catch (InterruptedException i) {
         } catch (IOException ex) {
             Logger.getLogger(Serverino.class.getName()).log(Level.SEVERE, null, ex);
         }
