@@ -5,7 +5,7 @@
  */
 package servermultithread;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,25 +14,31 @@ import java.util.logging.Logger;
  *
  * @author parrarodriguez.manue
  */
-public class Serverino {
+public class Serverino implements Runnable {
+    private Socket clientSocket;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+    public Serverino(Socket clientSocket) {
+        this.clientSocket = clientSocket;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Clinet collegato: " + clientSocket.getInetAddress());
         try {
-            ServerSocket server
-                    = new ServerSocket(5500);
-            System.out.println("Server è attivo e in ascolto");
-
-            while (true) {
-                Socket client = server.accept();
-                System.out.println("connessione ricevuta, ora se la smazza il thread");
-                Thread Serverino
-                        = new Thread(new Main(client));
-                Serverino.start();
-
+            PrintWriter scrittore = new PrintWriter(clientSocket.getOutputStream(), true);
+            BufferedReader lettore = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            String messaggio = "";
+            while (!messaggio.equals("exit")) {
+                System.out.println("serverino in ascolto...");
+                messaggio = lettore.readLine();
+                System.out.println("stringa dal client: " + messaggio);
+                scrittore.println(messaggio.toUpperCase());
             }
+
+            scrittore.close();
+            clientSocket.close();
+
+            System.out.println("chiusura connessione effettuata");
 
         } catch (IOException ex) {
             Logger.getLogger(Serverino.class.getName()).log(Level.SEVERE, null, ex);

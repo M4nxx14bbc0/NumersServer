@@ -5,7 +5,7 @@
  */
 package servermultithread;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,40 +14,23 @@ import java.util.logging.Logger;
  *
  * @author parrarodriguez.manue
  */
-public class Main implements Runnable {
+public class Main {
 
-    private Socket clientSocket;
-
-    public Main(Socket clientSocket) {
-        this.clientSocket = clientSocket;
-    }
-
-    @Override
-    public void run() {
-        System.out.println("Serverino  partito: "
-                + clientSocket.getInetAddress());
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
         try {
-
-            PrintWriter out
-                    = new PrintWriter(clientSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(clientSocket.getInputStream()));
-            String richiesta = "";
-            while (!richiesta.equals("exit")) {
-                System.out.println("serverino in ascolto...");
-                richiesta = in.readLine();
-                System.out.println("stringa dal client: " + richiesta);
-                out.println(richiesta.toUpperCase());
+            ServerSocket server = new ServerSocket(5500);
+            System.out.println("Server è attivo e in ascolto...");
+            while (true) {
+                Socket client = server.accept();
+                System.out.println("Connessione ricevuta");
+                Thread Serverino = new Thread(new Serverino(client));
+                Serverino.start();
             }
-
-            out.close();
-            clientSocket.close();
-
-            System.out.println("chiusura connessione effettuata");
-
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }
