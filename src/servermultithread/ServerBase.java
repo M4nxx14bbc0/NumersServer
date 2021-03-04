@@ -25,26 +25,29 @@ public class ServerBase implements Runnable {
     public void run() {
         System.out.println("Client collegato: " + clientSocket.getInetAddress());
         try {
-            InputStream dalServer = clientSocket.getInputStream(); 
+            InputStream dalClient = clientSocket.getInputStream(); 
             
-            BufferedReader lettore = new BufferedReader(new InputStreamReader(dalServer));
+            BufferedReader lettore = new BufferedReader(new InputStreamReader(dalClient));
             String messaggio = "";
             
             System.out.println("serverino in ascolto...");
             messaggio = lettore.readLine();
+            lettore.close();
+            dalClient.close();
             
             int numero = Integer.parseInt(messaggio);
             
-            Thread[] t = new Thread[numero];
+            Number[] t = new Number[numero];
             for (int i = 0; i < t.length; i++) {
-                t[i] = new Thread(new Processo(i+1));
+                t[i] = new Number(new Processo(i+1));
                 t[i].start();
             }
-            
+            numero = 0;
             for (int i = 0; i < t.length; i++) {
-                t[i].stop();;
+                numero += t[i].getNumber();
+                t[i].stop();
             }
-            
+            System.out.println("Risultato : "+numero);
             clientSocket.close();
 
             System.out.println("chiusura connessione effettuata");
