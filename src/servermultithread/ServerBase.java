@@ -25,10 +25,8 @@ public class ServerBase implements Runnable {
     public void run() {
         System.out.println("Client collegato: " + clientSocket.getInetAddress());
         try {
-            InputStream dalServer = clientSocket.getInputStream();
-            OutputStream alServer = clientSocket.getOutputStream(); 
+            InputStream dalServer = clientSocket.getInputStream(); 
             
-            PrintWriter scrittore = new PrintWriter(alServer, true);
             BufferedReader lettore = new BufferedReader(new InputStreamReader(dalServer));
             String messaggio = "";
             
@@ -43,12 +41,10 @@ public class ServerBase implements Runnable {
                 t[i].start();
             }
             
+            for (int i = 0; i < t.length; i++) {
+                t[i].stop();;
+            }
             
-            
-            System.out.println("stringa dal client: " + numero);
-            scrittore.println(messaggio + ": "+messaggio.length());
-
-            scrittore.close();
             clientSocket.close();
 
             System.out.println("chiusura connessione effettuata");

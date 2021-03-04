@@ -12,7 +12,7 @@ package servermultithread;
 public class Processo implements Runnable{
     private boolean stop = false;
     private int s;
-    private static int constant = 0;
+    private static int constant = 1;
     
     public Processo(int s){
         this.s = s;
@@ -20,15 +20,12 @@ public class Processo implements Runnable{
     
     @Override
     public void run(){
-        for (int i = 0;; i++) {
-            if(stop==true)
-                break;
-            s += constant;
-        }
+        s += constant;
+        System.out.println(s);
+        stop();
     }
     
-    public int stop(){
+    public void stop(){
         stop = true;
-        return s;
     }
 }
