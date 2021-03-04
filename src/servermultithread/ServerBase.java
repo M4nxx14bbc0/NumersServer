@@ -14,10 +14,10 @@ import java.util.logging.Logger;
  *
  * @author parrarodriguez.manue
  */
-public class Serverino implements Runnable {
-    private Socket clientSocket;
+public class ServerBase implements Runnable {
+    private static Socket clientSocket;
 
-    public Serverino(Socket clientSocket) {
+    public ServerBase(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 
@@ -31,12 +31,22 @@ public class Serverino implements Runnable {
             PrintWriter scrittore = new PrintWriter(alServer, true);
             BufferedReader lettore = new BufferedReader(new InputStreamReader(dalServer));
             String messaggio = "";
-            while (!messaggio.equalsIgnoreCase("exit")) {
-                System.out.println("serverino in ascolto...");
-                messaggio = lettore.readLine();
-                System.out.println("stringa dal client: " + messaggio);
-                scrittore.println(messaggio + ": "+messaggio.length());
+            
+            System.out.println("serverino in ascolto...");
+            messaggio = lettore.readLine();
+            
+            int numero = Integer.parseInt(messaggio);
+            
+            Thread[] t = new Thread[numero];
+            for (int i = 0; i < t.length; i++) {
+                t[i] = new Thread(new Processo(i+1));
+                t[i].start();
             }
+            
+            
+            
+            System.out.println("stringa dal client: " + numero);
+            scrittore.println(messaggio + ": "+messaggio.length());
 
             scrittore.close();
             clientSocket.close();
@@ -45,8 +55,7 @@ public class Serverino implements Runnable {
             Thread.sleep(5000);
         } catch (InterruptedException i) {
         } catch (IOException ex) {
-            Logger.getLogger(Serverino.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 }

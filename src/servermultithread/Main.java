@@ -26,7 +26,7 @@ public class Main {
             while (true) {
                 Socket client = server.accept();
                 System.out.println("Connessione ricevuta");
-                Thread serverino = new Thread(new Serverino(client));
+                Thread serverino = new Thread(new ServerBase(client));
                 serverino.start();
             }
         } catch (IOException ex) {
